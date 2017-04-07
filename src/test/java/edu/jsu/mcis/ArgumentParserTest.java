@@ -17,14 +17,14 @@ public class ArgumentParserTest {
 	
 	@Test
 	public void testArgument(){
-		ga.setArgumentName("length");
-		ga.setArgumentDescription("box length");
-		ga.setArgumentType(Argument.Type.INTEGER);
-		ga.setArgumentValue("7");
-		assertEquals("length", ga.getArgumentName());
-		assertEquals("box length", ga.getArgumentDescription());
-		assertEquals(Argument.Type.INTEGER, ga.getArgumentType());
-		assertEquals(7, ga.getArgumentValue());
+		ga.setName("length");
+		ga.setDescription("box length");
+		ga.setType(Argument.Type.INTEGER);
+		ga.setValue("7");
+		assertEquals("length", ga.getName());
+		assertEquals("box length", ga.getDescription());
+		assertEquals(Argument.Type.INTEGER, ga.getType());
+		assertEquals(7, ga.getValue());
 	}
 	
 	@Test	
@@ -36,61 +36,61 @@ public class ArgumentParserTest {
 	}
 	@Test
 	public void testAddArgArgument(){
-		ga.setArgumentName("length");
+		ga.setName("length");
 		pa.addArg(ga);
 		assertEquals(pa.getNumArguments(), 1);
-		ga.setArgumentName("width");
+		ga.setName("width");
 		pa.addArg(ga);
 		assertEquals(pa.getNumArguments(), 2);
 	}
 	@Test
 	public void testParse(){
 		Argument ga2 = new Argument();
-		ga2.setArgumentName("Parser2");
-		ga.setArgumentName("length");
+		ga2.setName("Parser2");
+		ga.setName("length");
 		pa.addArg(ga);
 		pa.addArg(ga2);
 		String[] args = {"val1", "val2"};
 		pa.parse(args);
 		Argument temp = new Argument();
 		temp = pa.getArg("length");
-		assertEquals("val1", temp.getArgumentValue());
+		assertEquals("val1", temp.getValue());
 		Argument temp2 = pa.getArg("Parser2");
-		assertEquals("val2", temp2.getArgumentValue());
+		assertEquals("val2", temp2.getValue());
 	}
 	@Test (expected= IllegalArgumentException.class)
 	public void testTooManyArgs(){
 		Argument ga2 = new Argument();
-		ga2.setArgumentName("Parser2");
-		ga.setArgumentName("length");
+		ga2.setName("Parser2");
+		ga.setName("length");
 		pa.addArg(ga);
 		pa.addArg(ga2);
 		String[] args = {"val1", "val2", "val3"};
 		pa.parse(args);
 		Argument temp = new Argument();
 		temp = pa.getArg("length");
-		assertEquals("val1", temp.getArgumentValue());
+		assertEquals("val1", temp.getValue());
 		Argument temp2 = pa.getArg("Parser2");
-		assertEquals("val2", temp2.getArgumentValue());
+		assertEquals("val2", temp2.getValue());
 		Argument temp3 = pa.getArg("Parser2");
-		assertEquals("val3", temp3.getArgumentValue());
+		assertEquals("val3", temp3.getValue());
 	}	
 	@Test (expected= IllegalArgumentException.class)
 	public void testTooFewArgs(){
 		Argument ga2 = new Argument();
-		ga2.setArgumentName("Parser2");
-		ga.setArgumentName("length");
+		ga2.setName("Parser2");
+		ga.setName("length");
 		pa.addArg(ga);
 		pa.addArg(ga2);
 		String[] args = {"val1"};
 		pa.parse(args);
 		Argument temp = new Argument();
 		temp = pa.getArg("length");
-		assertEquals("val1", temp.getArgumentValue());
+		assertEquals("val1", temp.getValue());
 	}	
 	@Test (expected= HelpMessageException.class)
 	public void TestUsageMessage(){
-		ga.setArgumentName("help");
+		ga.setName("help");
 		pa.addArg(ga);
 		String[] args = {"-h"};
 		pa.parse(args);
@@ -108,7 +108,7 @@ public class ArgumentParserTest {
 		try{
 			pa.parse(args);
 		}catch(IllegalArgumentException e){
-			assertEquals(message1, pa.getMessage());
+			assertEquals(message1, e.getMessage());
 		}
 		
 		

@@ -5,8 +5,9 @@ import java.io.*;
 
 public class ArgumentParserKeywords {
 	private ArgumentParser pa;
-	boolean error;
-	boolean helpError;
+	private boolean error;
+	private String errorMessage;
+	private boolean helpError;
 	
 	
 	public void StartVolumeCalculatorWithArguments(String[] args){
@@ -20,30 +21,31 @@ public class ArgumentParserKeywords {
 		}
 		catch(IllegalArgumentException e){
 			error = true;
+			errorMessage = e.getMessage();
 		}
 			
 		}
 	
 	
 	public String getWidth(){
-		return pa.getArg("width").getArgumentValue();
+		return pa.getArg("width").getValue();
 	}
 	
 	public String getHeight(){
-		return pa.getArg("height").getArgumentValue();
+		return pa.getArg("height").getValue();
 	}
 	
 	public String getLength(){
-		return pa.getArg("length").getArgumentValue();
+		return pa.getArg("length").getValue();
 	}
 	
 	public String getProgramOutput(){
 		if (error == true){
-			return pa.getMessage();
+			return errorMessage;
 		}
 		
 		else if (helpError == true){
-			return pa.getHelpMessage();
+			return errorMessage;
 		}
 
 		else {
@@ -74,22 +76,21 @@ public class ArgumentParserKeywords {
 		}
 	}
 	public String getPet(){
-		return pa.getArg("pet").getArgumentValue();
+		return pa.getArg("pet").getValue();
 	}
 	public String getNumber(){
-		return pa.getArg("number").getArgumentValue();
+		return pa.getArg("number").getValue();
 	}
 	public String getRainy(){
-		return pa.getArg("rainy").getArgumentValue();
+		return pa.getArg("rainy").getValue();
 	}
 	public String getBathrooms(){
-		return pa.getArg("bathrooms").getArgumentValue();
+		return pa.getArg("bathrooms").getValue();
 	}
 	
 	public void StartProgramWithArguments(String[] args){
 		pa = new ArgumentParser();
 		helpError = false;
-		pa.setArgumentName("-h");
 		pa.setProgramName("VolumeCalculator");
 		pa.setProgramDescription("\nCalculate the volume of a box.");
 				
@@ -102,11 +103,12 @@ public class ArgumentParserKeywords {
 		}
 		catch(HelpMessageException e){
 			helpError = true;
+			errorMessage = e.getMessage();
 		}
 		
 	}
 	public String getHelpMessage(){
-		return pa.getArg("-h").toString();
+		return errorMessage;
 	}
 
 }

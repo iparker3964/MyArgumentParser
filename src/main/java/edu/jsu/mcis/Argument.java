@@ -20,11 +20,11 @@ public class Argument{
 		name = "";
 	}
 
-	public void setArgumentValue (Object value){
+	public void setValue (Object value){
 		this.value = value;
 	}
 
-	public <T> T getArgumentValue(){
+	public <T> T getValue(){
 		if (type == Type.INTEGER) return (T)(Integer.valueOf((String)value));		
 		else if (type == Type.BOOLEAN) return (T)(Boolean.valueOf((String)value));
 		else if (type == Type.FLOAT) return (T)(Float.valueOf((String)value));
@@ -32,26 +32,26 @@ public class Argument{
 		return (T)(String)value;
 	}
 
-	public void setArgumentType(Type type){
+	public void setType(Type type){
 		this.type = type;
 	}
 
-	public Type getArgumentType(){
+	public Type getType(){
 		return type;
 	}
 
-	public void setArgumentDescription(String description){
+	public void setDescription(String description){
 		this.description = description;
 	}
 
-	public String getArgumentDescription(){
+	public String getDescription(){
 		return description;
 	}
 	
-	public void setArgumentName (String name){
+	public void setName (String name){
 		this.name = name;
 	}
-	public String getArgumentName(){
+	public String getName(){
 		return name;
 	}
 
