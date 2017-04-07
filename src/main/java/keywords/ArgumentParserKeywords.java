@@ -11,7 +11,6 @@ public class ArgumentParserKeywords {
 	
 	public void StartVolumeCalculatorWithArguments(String[] args){
 		pa = new ArgumentParser();
-		
 		pa.setProgramName("VolumeCalculator");
 		pa.addArg("length", "", Argument.Type.STRING);
 		pa.addArg("width", "", Argument.Type.STRING);
@@ -22,18 +21,20 @@ public class ArgumentParserKeywords {
 		catch(IllegalArgumentException e){
 			error = true;
 		}
-	}
+			
+		}
+	
 	
 	public String getWidth(){
-		return pa.getArg("width").getValue();
+		return pa.getArg("width").getArgumentValue();
 	}
 	
 	public String getHeight(){
-		return pa.getArg("height").getValue();
+		return pa.getArg("height").getArgumentValue();
 	}
 	
 	public String getLength(){
-		return pa.getArg("length").getValue();
+		return pa.getArg("length").getArgumentValue();
 	}
 	
 	public String getProgramOutput(){
@@ -73,26 +74,28 @@ public class ArgumentParserKeywords {
 		}
 	}
 	public String getPet(){
-		return pa.getArg("pet").getValue();
+		return pa.getArg("pet").getArgumentValue();
 	}
 	public String getNumber(){
-		return pa.getArg("number").getValue();
+		return pa.getArg("number").getArgumentValue();
 	}
 	public String getRainy(){
-		return pa.getArg("rainy").getValue();
+		return pa.getArg("rainy").getArgumentValue();
 	}
 	public String getBathrooms(){
-		return pa.getArg("bathrooms").getValue();
+		return pa.getArg("bathrooms").getArgumentValue();
 	}
 	
 	public void StartProgramWithArguments(String[] args){
 		pa = new ArgumentParser();
+		helpError = false;
+		pa.setArgumentName("-h");
 		pa.setProgramName("VolumeCalculator");
-		pa.setProgramDescription("Calcuate the volume of a box.");
+		pa.setProgramDescription("\nCalculate the volume of a box.");
 				
-		pa.addArg("length", "\tlength the length of the box (float)", Argument.Type.INTEGER);
-		pa.addArg("width", "\twidth the width of the box(float)", Argument.Type.INTEGER);
-		pa.addArg("height", "\theight the height of the box(float)", Argument.Type.INTEGER);
+		pa.addArg("length", "length the length of the box (float)", Argument.Type.INTEGER);
+		pa.addArg("width", "width the width of the box(float)", Argument.Type.INTEGER);
+		pa.addArg("height", "height the height of the box(float)", Argument.Type.INTEGER);
 		
 		try{
 			pa.parse(args);
@@ -100,6 +103,10 @@ public class ArgumentParserKeywords {
 		catch(HelpMessageException e){
 			helpError = true;
 		}
+		
+	}
+	public String getHelpMessage(){
+		return pa.getArg("-h").toString();
 	}
 
 }
