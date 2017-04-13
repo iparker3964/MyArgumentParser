@@ -7,7 +7,7 @@ import java.io.*;
 	
 public class Argument{
 	public enum Type {BOOLEAN, FLOAT, INTEGER, STRING};
-	private Object value;
+	private String value;
 	private String description;
 	private Type type;
 	private String name;
@@ -20,16 +20,16 @@ public class Argument{
 		name = "";
 	}
 
-	public void setValue (Object value){
+	public void setValue (String value){
 		this.value = value;
 	}
 
 	public <T> T getValue(){
-		if (type == Type.INTEGER) return (T)(Integer.valueOf((String)value));		
+		if (type == Type.INTEGER) return (T)(new Integer(Integer.parseInt((String)value)));		
 		else if (type == Type.BOOLEAN) return (T)(Boolean.valueOf((String)value));
 		else if (type == Type.FLOAT) return (T)(Float.valueOf((String)value));
 		else if (type == Type.STRING) return (T)(String.valueOf((String)value));
-		return (T)(String)value;
+		else return (T)(String)value;
 	}
 
 	public void setType(Type type){
