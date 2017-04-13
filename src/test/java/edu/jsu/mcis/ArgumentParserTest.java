@@ -29,9 +29,9 @@ public class ArgumentParserTest {
 	
 	@Test	
 	public void testAddArgMultArguments(){
-		pa.addArg("Parser", "", Argument.Type.INTEGER);
+		pa.addArg("Parser", "", false, Argument.Type.INTEGER);
 		assertEquals(pa.getNumArguments(), 1);
-		pa.addArg("Parser2", "", Argument.Type.INTEGER);
+		pa.addArg("Parser2", "", false, Argument.Type.INTEGER);
 		assertEquals(pa.getNumArguments(), 2);
 	}
 	@Test
@@ -99,22 +99,24 @@ public class ArgumentParserTest {
 	public void testMessage(){
 		pa = new ArgumentParser();
 		pa.setProgramName("VolumeCalculator");
-		pa.addArg("length", "", Argument.Type.STRING);
-		pa.addArg("width", "", Argument.Type.STRING);
-		pa.addArg("height", "", Argument.Type.STRING);
+		pa.addArg("length", "", false, Argument.Type.STRING);
+		pa.addArg("width", "", false, Argument.Type.STRING);
+		pa.addArg("height", "", false, Argument.Type.STRING);
 		
-		String[] args = {"7", "5", "2" , "43"};
+		String[] args = {"7", "something", "2" , "43"};
 		String message1 = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: unrecognized arguments: 43";
+		//String message2 = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something";
 		try{
 			pa.parse(args);
 		}catch(IllegalArgumentException e){
 			assertEquals(message1, e.getMessage());
+			//assertEquals(message2, e.getMessage());
 		}
 		
 		
 	}
 	@Test
-	public void TestNamedArgumentDefaults(){
+	public void TestOptionalArgument(){
 		Argument ga2 = new Argument();
 		Argument ga3 = new Argument();
 		Argument ga4 = new Argument();
@@ -124,9 +126,13 @@ public class ArgumentParserTest {
 		ga3.setName("height");
 		ga4.setName("type");
 		ga5.setName("digits");
+		ga4.setOptional(true);
+		ga5.setOptional(true);
 		pa.addArg(ga);
 		pa.addArg(ga2);
 		pa.addArg(ga3);
+		pa.addArg(ga4);
+		pa.addArg(ga5);
 		String[] args = {"7", "5", "2", "--type", "box","--digits", "4"};
 		pa.parse(args);
 		Argument temp = new Argument();
@@ -137,7 +143,6 @@ public class ArgumentParserTest {
 		Argument temp3 = pa.getArg("height");
 		assertEquals("2", temp3.getValue());
 		Argument temp4 = pa.getArg("type");
-		//assertEquals("type", ga4.getName());
 		assertEquals("box", temp4.getValue());
 		Argument temp5 = pa.getArg("digits");
 		System.out.println(temp4.getValue() + "temp4");

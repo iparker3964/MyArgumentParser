@@ -11,6 +11,7 @@ public class Argument{
 	private String description;
 	private Type type;
 	private String name;
+	private boolean optional;
 	
 
 	public Argument(){
@@ -18,6 +19,7 @@ public class Argument{
 		description = "";
 		type = Type.STRING;
 		name = "";
+		optional = false;
 	}
 
 	public void setValue (String value){
@@ -54,5 +56,14 @@ public class Argument{
 	public String getName(){
 		return name;
 	}
-
+	public void setOptional (Boolean optional){
+		this.optional = optional;
+	}
+	public Boolean getOptional(){
+		return optional;
+	}
+	
+	public void setDefault(String value){
+		this.value = value;
+	}
 }

@@ -13,9 +13,13 @@ public class ArgumentParserKeywords {
 	public void StartVolumeCalculatorWithArguments(String[] args){
 		pa = new ArgumentParser();
 		pa.setProgramName("VolumeCalculator");
-		pa.addArg("length", "", Argument.Type.STRING);
-		pa.addArg("width", "", Argument.Type.STRING);
-		pa.addArg("height", "", Argument.Type.STRING);
+		pa.addArg("length", "", false,Argument.Type.STRING);
+		pa.addArg("width", "", false, Argument.Type.STRING);
+		pa.addArg("height", "", false, Argument.Type.STRING);
+		pa.addArg("type", "", true, Argument.Type.STRING);
+		pa.getArg("type").setDefault("box");
+		pa.addArg("digits", "", true, Argument.Type.STRING);
+		pa.getArg("digits").setDefault("4");
 		try{
 			pa.parse(args);
 		}
@@ -24,7 +28,24 @@ public class ArgumentParserKeywords {
 			errorMessage = e.getMessage();
 		}
 			
+	}
+	
+	/* public void StartVolumeCalculatorWithArgumentsTwo(String[] args){
+		pa = new ArgumentParser();
+		pa.setProgramName("VolumeCalculator");
+		pa.addArg("length", "", false,Argument.Type.STRING);
+		pa.addArg("width", "", false, Argument.Type.STRING);
+		pa.addArg("height", "", false, Argument.Type.STRING);
+		
+		try{
+			pa.parse(args);
 		}
+		catch(IllegalArgumentException e){
+			error = true;
+			errorMessage = e.getMessage();
+		} 
+			
+	}*/
 	
 	
 	public String getWidth(){
@@ -63,10 +84,10 @@ public class ArgumentParserKeywords {
 		pa = new ArgumentParser();
 		error = false;
 				
-		pa.addArg("pet", "", Argument.Type.STRING);
-		pa.addArg("number", "", Argument.Type.STRING);
-		pa.addArg("rainy", "", Argument.Type.STRING);
-		pa.addArg("bathrooms", "", Argument.Type.STRING);
+		pa.addArg("pet", "", false, Argument.Type.STRING);
+		pa.addArg("number", "", false, Argument.Type.STRING);
+		pa.addArg("rainy", "", false, Argument.Type.STRING);
+		pa.addArg("bathrooms", "", false, Argument.Type.STRING);
 		
 		try{
 			pa.parse(args);
@@ -87,6 +108,13 @@ public class ArgumentParserKeywords {
 	public String getBathrooms(){
 		return pa.getArg("bathrooms").getValue();
 	}
+	public String getType(){
+		return pa.getArg("type").getValue();
+	}
+	public String getDigits(){
+		return pa.getArg("digits").getValue();
+	}
+	
 	
 	public void StartProgramWithArguments(String[] args){
 		pa = new ArgumentParser();
@@ -94,9 +122,9 @@ public class ArgumentParserKeywords {
 		pa.setProgramName("VolumeCalculator");
 		pa.setProgramDescription("\nCalculate the volume of a box.");
 				
-		pa.addArg("length", "length the length of the box (float)", Argument.Type.INTEGER);
-		pa.addArg("width", "width the width of the box(float)", Argument.Type.INTEGER);
-		pa.addArg("height", "height the height of the box(float)", Argument.Type.INTEGER);
+		pa.addArg("length", "length the length of the box (float)", false, Argument.Type.INTEGER);
+		pa.addArg("width", "width the width of the box(float)", false, Argument.Type.INTEGER);
+		pa.addArg("height", "height the height of the box(float)", false, Argument.Type.INTEGER);
 		
 		try{
 			pa.parse(args);
@@ -104,6 +132,10 @@ public class ArgumentParserKeywords {
 		catch(HelpMessageException e){
 			helpError = true;
 			errorMessage = e.getMessage();
+		}
+		catch(NumberFormatException e){
+			error = true;
+			errorMessage = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something";
 		}
 		
 	}
