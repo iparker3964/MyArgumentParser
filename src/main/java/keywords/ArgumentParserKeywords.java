@@ -26,27 +26,8 @@ public class ArgumentParserKeywords {
 		catch(IllegalArgumentException e){
 			error = true;
 			errorMessage = e.getMessage();
-		}
-			
+		}	
 	}
-	
-	/* public void StartVolumeCalculatorWithArgumentsTwo(String[] args){
-		pa = new ArgumentParser();
-		pa.setProgramName("VolumeCalculator");
-		pa.addArg("length", "", false,Argument.Type.STRING);
-		pa.addArg("width", "", false, Argument.Type.STRING);
-		pa.addArg("height", "", false, Argument.Type.STRING);
-		
-		try{
-			pa.parse(args);
-		}
-		catch(IllegalArgumentException e){
-			error = true;
-			errorMessage = e.getMessage();
-		} 
-			
-	}*/
-	
 	
 	public String getWidth(){
 		return pa.getArg("width").getValue();

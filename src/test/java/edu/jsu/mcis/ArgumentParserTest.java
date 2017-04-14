@@ -8,7 +8,6 @@ public class ArgumentParserTest {
 	private ArgumentParser pa;
 	private Argument ga;
 	
-	
 	@Before
 	public void setUp(){
 		pa = new ArgumentParser();
@@ -71,9 +70,9 @@ public class ArgumentParserTest {
 		temp = pa.getArg("length");
 		assertEquals("val1", temp.getValue());
 		Argument temp2 = pa.getArg("Parser2");
-		assertEquals("val2", temp2.getValue());/*
+		assertEquals("val2", temp2.getValue());
 		Argument temp3 = pa.getArg("Parser2");
-		assertEquals("val3", temp3.getValue());*/
+		assertEquals("val3", temp3.getValue());
 	}	
 	@Test (expected= IllegalArgumentException.class)
 	public void testTooFewArgs(){
@@ -105,15 +104,11 @@ public class ArgumentParserTest {
 		
 		String[] args = {"7", "something", "2" , "43"};
 		String message1 = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: unrecognized arguments: 43";
-		//String message2 = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value: something";
 		try{
 			pa.parse(args);
 		}catch(IllegalArgumentException e){
 			assertEquals(message1, e.getMessage());
-			//assertEquals(message2, e.getMessage());
 		}
-		
-		
 	}
 	@Test
 	public void TestOptionalArgument(){
@@ -145,10 +140,6 @@ public class ArgumentParserTest {
 		Argument temp4 = pa.getArg("type");
 		assertEquals("box", temp4.getValue());
 		Argument temp5 = pa.getArg("digits");
-		System.out.println(temp4.getValue() + "temp4");
-		System.out.println(temp4.getName());
-		System.out.println(temp5.getValue() + "temp5");
-		System.out.println(temp5.getName());
 		assertEquals("4", temp5.getValue());
 		
 	}

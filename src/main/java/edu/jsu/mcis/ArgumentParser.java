@@ -8,10 +8,10 @@ import java.io.*;
 
 public class ArgumentParser{
     private List<Argument> listArgs;
+	private List<String> positionalKeys;
     private String programName;
     private String programDescription;
 	private int numOfArgs;
-	private List<String> positionalKeys;
 	
 	public ArgumentParser() {
 		positionalKeys = new ArrayList<String>();
@@ -32,10 +32,6 @@ public class ArgumentParser{
 	public void addArg(Argument args){
 		listArgs.add(args);
 	}
-	
-	/* private String buildMessage(String[] args) {
-		
-	} */
 	
 	public void parse(String[] args) { 
 		addPositionalKeys();
@@ -77,21 +73,15 @@ public class ArgumentParser{
 				throw new IllegalArgumentException(message);
 			}
 			else{
-				//throw new IllegalArgumentException(Integer.toString(positionalKeys.size()));
 				optionalArgName = positionalKeys.get(posCount);
-				//optionalArgName = listArgs.get(num).getName();
 				optionalArgValue = args[i];
 				posCount++;
-				
 			}
 			int placement = getPlace(optionalArgName);
 			Argument temp = listArgs.get(placement);
 			if(convert(optionalArgValue, temp.getType())){
 				listArgs.get(placement).setValue(optionalArgValue);
-				
-			}
-			
-				
+			}	
 			else{
 				String badArg = listArgs.get(placement) + " ";
 				String message = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value:" + badArg ;
@@ -109,9 +99,6 @@ public class ArgumentParser{
 			message = message.trim();
 			throw new IllegalArgumentException(message);
 		}
-		
-		
-		
 	}
 	
 	public void addPositionalKeys(){
@@ -185,7 +172,6 @@ public class ArgumentParser{
 			}
 		}
 		return null;
-		// at some point, we need to throw an exception - argument doesn't exist 
 	}	
 	
 	public int getPlace(String name){
