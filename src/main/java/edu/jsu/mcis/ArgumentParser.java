@@ -7,199 +7,125 @@ import java.io.*;
 
 
 public class ArgumentParser{
-    private List<Argument> listArgs;
-	private List<String> positionalKeys;
-    private String programName;
-    private String programDescription;
-	private int numOfArgs;
+	private Argument argument;
+	private static int count;
+	private ArrayList<String> argList;
+	private List<Argument> listArg;
+	private String message;
+	private String programName;
+	private ArrayList<String> nameList;
+	private boolean isCorrectAmountOfArgs;
+	private String programDescription;
 	
-	public ArgumentParser() {
-		positionalKeys = new ArrayList<String>();
-        listArgs = new ArrayList<Argument>();
-		programName = "";
+	public ArgumentParser(){
+		count = 0;
+		argList = new ArrayList<String>();
+		argument = new Argument();
+		listArg = new ArrayList<Argument>();
+		nameList = new ArrayList<String>();
+		message = "";
+		isCorrectAmountOfArgs = true;
 		programDescription = "";
-		numOfArgs = 0;
-    }
-	public void addArg(String name, String description, Boolean optional, Argument.Type type) {
-        Argument temp = new Argument();
-        temp.setName(name);
-        temp.setDescription(description);
-        temp.setType(type);
-		temp.setOptional(optional);
-		addArg(temp);
-    }
-	
-	public void addArg(Argument args){
-		listArgs.add(args);
 	}
+	public void addArgument(String name, String description, Argument.Type type){
+		count++;
+		Argument tempArg = new Argument();
+		tempArg.setName(name);
+		nameList.add(name);
+		tempArg.setDescription(description);
+		tempArg.setType(type);
+		addArgument(tempArg);
+	}
+	public void addArgument(Argument args){
+		listArg.add(args);
+	}
+	public void inputArg(String arg){
+		argList.add(arg);
 	
-	public void parse(String[] args) { 
-		addPositionalKeys();
+	}
+	public void checkArgInput(){
 		String name = "";
-		
-		for(Argument k : listArgs){
-			if(!k.getOptional())
-				name += " " + k.getName();
-		}  
-		
-		int num = 0;
-		int posCount = 0;
-		for(int i = 0; i < args.length; i++){
-			if(args[i].equals("-h") || args[i].equals("--help")){
-				String argumentDescriptions = "";				
-				
-				for(Argument k : listArgs){
-					if(!k.getOptional())
-						argumentDescriptions += "\n" + k.getDescription();
-				}  
-				String help = "usage: java " + getProgramName() + name + getProgramDescription() + "\n" + "positional arguments:" + argumentDescriptions;
-				help = help.trim();
-				throw new HelpMessageException(help);
-			}
-			String optionalArgName;
-			String optionalArgValue;
-			if(args[i].contains("--") && !args[i].contains("--help")){
-				optionalArgName = args[i].substring(2);
-				i++;
-				optionalArgValue = args[i];
-			}
-			else if(posCount >= numOfPositional()){
-				String extra = "";
-				for (int j = i; j < args.length; j++){
-					extra += args[j] + " ";
-				} 
-				String message = "usage: java " + getProgramName() + name + "\n" + getProgramName() + ".java: error: unrecognized arguments: " + extra;
-				message = message.trim();
-				throw new IllegalArgumentException(message);
-			}
-			else{
-				optionalArgName = positionalKeys.get(posCount);
-				optionalArgValue = args[i];
-				posCount++;
-			}
-			int placement = getPlace(optionalArgName);
-			Argument temp = listArgs.get(placement);
-			if(convert(optionalArgValue, temp.getType())){
-				listArgs.get(placement).setValue(optionalArgValue);
-			}	
-			else{
-				String badArg = listArgs.get(placement) + " ";
-				String message = "usage: java VolumeCalculator length width height\nVolumeCalculator.java: error: argument width: invalid float value:" + badArg ;
-				message = message.trim();
-				throw new NumberFormatException();
-			}
-			num++;
+		String missingArgs = "";
+		String incorrectArg = " ";
+		for(Argument arg: listArg){
+			name += " " + arg.getName();
 		}
-		if(posCount < numOfPositional()){
-			String less = "";
-			for (int k = listArgs.size(); k < args.length; k++){
-				less += args[k] + " " ; 
+		String message = "usage: java " + getProgramName() ;
+		//not enough arguments
+		if(count > argList.size()){
+			isCorrectAmountOfArgs = false;
+			for(int i = argList.size(); i < count; i++){
+				missingArgs += listArg.get(2).getName();
 			}
-			String message = ".java: error: unrecognized arguments: "  + less;
+			message += name + " " +getProgramName() +".java: error: the following arguments are required: " + missingArgs;
+			message = message.trim();
+			throw new IllegalArgumentException(message);
+		}
+		//to many arguments
+		if(count < argList.size()){
+			isCorrectAmountOfArgs = false;
+			for(int i = count; i < argList.size(); i++){
+				incorrectArg += argList.get(i);
+			}
+			message += name + " " +getProgramName() +".java: error: unrecognized arguments:" + incorrectArg;
 			message = message.trim();
 			throw new IllegalArgumentException(message);
 		}
 	}
-	
-	public void addPositionalKeys(){
-		for(int i = 0; i < listArgs.size(); i++){
-			if(listArgs.get(i).getOptional() == false){
-				positionalKeys.add(listArgs.get(i).getName());
+	public void parser(String[] args){
+		String name = "";
+		for(Argument arg: listArg){
+			name += " " + arg.getName();
+		}
+		for(String word: args){
+			if(word.equals("-h")){
+				
+				String message = "usage: java " + getProgramName() + name + "\n" getProgramDescription() + "\npositional arguments: \n";
+				for(Argument arg: listArg){
+					message += arg.getName() + " the " + arg.getName() + "of the box(float)\n";
+				}
+				message = message.trim();
+				
+				throw new HelpMessageException(message);
 			}
 		}
-	}
-	
-	public int numOfOptional(){
-		int count = 0;
-		for(int i = 0; i < listArgs.size(); i++){
-			if(listArgs.get(i).getOptional() == true){
-				count++;
+		for(String arg: args){
+			inputArg(arg);
+		}
+		checkArgInput();
+		if(isCorrectAmountOfArgs == true){
+			for(int i = 0; i < listArg.size(); i++){
+				listArg.get(i).setValue(args[i]);
 			}
 		}
-		return count;
-	}
-	
-	public int numOfPositional(){
-		int count = 0;
-		for(int i = 0; i < listArgs.size(); i++){
-			if(listArgs.get(i).getOptional() == false){
-				count++;
-			}
-		}
-		return count;
-	}
-	
-	public boolean convert(String value, Argument.Type type){
-		Object o;
-		if(type == Argument.Type.INTEGER){
-			try{
-				o = Integer.parseInt(value);
-				return true;
-			}
-			catch(NumberFormatException e){ 
-				return false;
-			}
-		}
-		else if(type == Argument.Type.FLOAT){
-			try{
-				o = Float.valueOf(value);
-				return true;
-			}
-			catch(NumberFormatException e){
-				return false;
-			}
-		}
-		else if(type == Argument.Type.BOOLEAN){
-			if(value.contains("true") || value.contains("false")){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}
-		else if(type == Argument.Type.STRING){
-			return true;
-		}
+		/*if(count > argList.size()){
+			String message = "";
+			throw new IllegalArgumentException();
+		}*/
 		
-		return false;
-	}
-			
-	
-	public Argument getArg(String name){
-		for(int i=0; i<listArgs.size(); i++){
-			if(name.equals(listArgs.get(i).getName())){
-				return listArgs.get(i);
+		
+	} 
+	public String getArg(String arg){
+		String value = "";
+		for(int i = 0; i < listArg.size(); i++){
+			if(listArg.get(i).getName().equals(arg)){
+				value +=listArg.get(i).getValue();
 			}
 		}
-		return null;
-	}	
-	
-	public int getPlace(String name){
-		for(int i = 0; i < listArgs.size(); i++){
-			if(name.equals(listArgs.get(i).getName())){
-				return i;
-			}
-		}
-		return 0;
+		return value;
 	}
-	
-	public int getNumArguments(){
-		return listArgs.size();
+	public void setProgramName(String programName){
+			this.programName = programName;
 	}
-	
-	public void setProgramName(String nameProgram){
-		programName = nameProgram;
-	}
-	
 	public String getProgramName(){
 		return programName;
-	}	
-	
-	public void setProgramDescription(String descriptionProgram){
-		programDescription = descriptionProgram;
 	}
-	
+	public void setProgramDescription(String description){
+		this.programDescription = description;
+	}
 	public String getProgramDescription(){
 		return programDescription;
-	}	
+	}
+	//public void get
+	
 }

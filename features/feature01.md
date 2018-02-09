@@ -29,7 +29,7 @@ should produce the following:
 ## Acceptance Tests
 
     | *Variable*  | *Value*                                                                                                   |
-    | ${expected} | usage: java VolumeCalculator length width height\nVolumeCalcultor.java: error: unrecognized arguments: 43 |
+    | ${expected} | usage: java VolumeCalculator length width height VolumeCalcultor.java: error: unrecognized arguments: 43 |
 
     | *Test Case*                            | *Action*                              | *Argument*         | *Argument*   | *Argument* | *Argument* |
     | Test Volume Calculator Normal Function | Start Volume Cacluator With Arguments | 7                  | 5            | 2          |            |
@@ -43,7 +43,7 @@ should produce the following:
     |                                        | Should Be Equal                       | ${output}          | 70           |            |            |
     | Test Unrecognized Argument             | Start Volume Cacluator With Arguments | 7                  | 5            | 2          | 43         |
     |                                        | ${output}=                            | Get Program Output |              |            |            |
-    |                                        | Should Be Equal                       | ${output}          | 70           |            |            |
+    |                                        | Should Be Equal                       | ${output}          | ${expected}  |            |            |
     | Test Absurd Program Normal Function    | Start Absurd Program With Arguments   | dog                | 2            | true       | 3.5        |
     |                                        | ${pet}=                               | Get Pet            |              |            |            |
     |                                        | Should Be Equal                       | dog                | ${pet}       |            |            |

@@ -6,7 +6,7 @@ import java.io.*;
 
 	
 public class Argument{
-	public enum Type {BOOLEAN, FLOAT, INTEGER, STRING};
+	public enum Type {BOOLEAN, FLOAT, INTEGER, STRING, DOUBLE};
 	private String value;
 	private String description;
 	private Type type;
@@ -31,6 +31,7 @@ public class Argument{
 		else if (type == Type.BOOLEAN) return (T)(Boolean.valueOf((String)value));
 		else if (type == Type.FLOAT) return (T)(Float.valueOf((String)value));
 		else if (type == Type.STRING) return (T)(String.valueOf((String)value));
+		else if (type == Type.DOUBLE) return (T)(Double.valueOf((String)value));
 		else return (T)(String)value;
 	}
 
